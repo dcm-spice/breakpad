@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
     "google": "opensource@google.com"
   }
   s.source       = {
-    :git => "ssh://git@git.drecom.jp:10022/hattori_yuri/breakpad.git"
+    :git => "https://github.com/dcm-spice/breakpad.git"
   }
 
   preserve_paths = %w(
