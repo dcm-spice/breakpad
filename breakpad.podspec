@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
   }
   s.source       = {
     :git => "https://github.com/dcm-spice/breakpad.git",
-    :tag => "0.0.1"
+    :tag => s.version
   }
 
   preserve_paths = %w(
