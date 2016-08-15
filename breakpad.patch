@@ -1,0 +1,100 @@
+diff --git Android.mk Android.mk
+index 74625eb..a9515cb 100644
+--- Android.mk
++++ Android.mk
+@@ -48,7 +48,7 @@
+ # The top Google Breakpad directory.
+ # We assume this Android.mk to be under 'android/google_breakpad'
+ 
+-LOCAL_PATH := $(call my-dir)/../..
++LOCAL_PATH := $(call my-dir)/breakpad
+ 
+ # Defube the client library module, as a simple static library that
+ # exports the right include path / linker flags to its users.
+@@ -97,7 +97,8 @@ LOCAL_C_INCLUDES        := $(LOCAL_PATH)/src/common/android/include \
+ 
+ LOCAL_EXPORT_C_INCLUDES := $(LOCAL_C_INCLUDES)
+ LOCAL_EXPORT_LDLIBS     := -llog
++LOCAL_CPPFLAGS := -std=c++11 -D__STDC_LIMIT_MACROS
+ 
+ include $(BUILD_STATIC_LIBRARY)
+ 
+-# Done.
+\ No newline at end of file
++# Done.
+diff --git breakpad/src/common/convert_UTF.c breakpad/src/common/convert_UTF.c
+index bfaa884..efd42ff 100644
+--- breakpad/src/common/convert_UTF.c
++++ breakpad/src/common/convert_UTF.c
+@@ -79,7 +79,7 @@ static const UTF32 halfMask = 0x3FFUL;
+ 
+ /* --------------------------------------------------------------------- */
+ 
+-ConversionResult ConvertUTF32toUTF16 (const UTF32** sourceStart, const UTF32* sourceEnd,
++ConversionResult GBP_ConvertUTF32toUTF16 (const UTF32** sourceStart, const UTF32* sourceEnd,
+                                       UTF16** targetStart, UTF16* targetEnd, ConversionFlags flags) {
+   ConversionResult result = conversionOK;
+   const UTF32* source = *sourceStart;
+@@ -127,7 +127,7 @@ return result;
+ 
+ /* --------------------------------------------------------------------- */
+ 
+-ConversionResult ConvertUTF16toUTF32 (const UTF16** sourceStart, const UTF16* sourceEnd,
++ConversionResult GBP_ConvertUTF16toUTF32 (const UTF16** sourceStart, const UTF16* sourceEnd,
+                                       UTF32** targetStart, UTF32* targetEnd, ConversionFlags flags) {
+   ConversionResult result = conversionOK;
+   const UTF16* source = *sourceStart;
+@@ -174,7 +174,7 @@ ConversionResult ConvertUTF16toUTF32 (const UTF16** sourceStart, const UTF16* so
+   *targetStart = target;
+ #ifdef CVTUTF_DEBUG
+   if (result == sourceIllegal) {
+-    fprintf(stderr, "ConvertUTF16toUTF32 illegal seq 0x%04x,%04x\n", ch, ch2);
++    fprintf(stderr, "GBP_ConvertUTF16toUTF32 illegal seq 0x%04x,%04x\n", ch, ch2);
+     fflush(stderr);
+   }
+ #endif
+@@ -230,7 +230,7 @@ static const UTF8 firstByteMark[7] = { 0x00, 0x00, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC
+ 
+ /* --------------------------------------------------------------------- */
+ 
+-ConversionResult ConvertUTF16toUTF8 (const UTF16** sourceStart, const UTF16* sourceEnd,
++ConversionResult GBP_ConvertUTF16toUTF8 (const UTF16** sourceStart, const UTF16* sourceEnd,
+                                      UTF8** targetStart, UTF8* targetEnd, ConversionFlags flags) {
+   ConversionResult result = conversionOK;
+   const UTF16* source = *sourceStart;
+@@ -341,7 +341,7 @@ static Boolean isLegalUTF8(const UTF8 *source, int length) {
+  * Exported function to return whether a UTF-8 sequence is legal or not.
+  * This is not used here; it's just exported.
+  */
+-Boolean isLegalUTF8Sequence(const UTF8 *source, const UTF8 *sourceEnd) {
++Boolean GBP_isLegalUTF8Sequence(const UTF8 *source, const UTF8 *sourceEnd) {
+   int length = trailingBytesForUTF8[*source]+1;
+   if (source+length > sourceEnd) {
+     return false;
+@@ -351,7 +351,7 @@ Boolean isLegalUTF8Sequence(const UTF8 *source, const UTF8 *sourceEnd) {
+ 
+ /* --------------------------------------------------------------------- */
+ 
+-ConversionResult ConvertUTF8toUTF16 (const UTF8** sourceStart, const UTF8* sourceEnd,
++ConversionResult GBP_ConvertUTF8toUTF16 (const UTF8** sourceStart, const UTF8* sourceEnd,
+                                      UTF16** targetStart, UTF16* targetEnd, ConversionFlags flags) {
+   ConversionResult result = conversionOK;
+   const UTF8* source = *sourceStart;
+@@ -423,7 +423,7 @@ return result;
+ 
+ /* --------------------------------------------------------------------- */
+ 
+-ConversionResult ConvertUTF32toUTF8 (const UTF32** sourceStart, const UTF32* sourceEnd,
++ConversionResult GBP_ConvertUTF32toUTF8 (const UTF32** sourceStart, const UTF32* sourceEnd,
+                                      UTF8** targetStart, UTF8* targetEnd, ConversionFlags flags) {
+   ConversionResult result = conversionOK;
+   const UTF32* source = *sourceStart;
+@@ -475,7 +475,7 @@ return result;
+ 
+ /* --------------------------------------------------------------------- */
+ 
+-ConversionResult ConvertUTF8toUTF32 (const UTF8** sourceStart, const UTF8* sourceEnd,
++ConversionResult GBP_ConvertUTF8toUTF32 (const UTF8** sourceStart, const UTF8* sourceEnd,
+                                      UTF32** targetStart, UTF32* targetEnd, ConversionFlags flags) {
+   ConversionResult result = conversionOK;
+   const UTF8* source = *sourceStart;
